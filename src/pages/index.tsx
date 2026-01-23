@@ -1,93 +1,86 @@
 import type { NextPage } from "next";
-import { useMemo, useState } from "react";
-import type { OrderBy, SortBy } from "@/features/nfts/nfts.types";
-import { useProductsQuery } from "@/features/nfts/nfts.queries";
+import { useMemo } from "react";
+
+import { Header } from "@/components/Header/Header";
+import { ProductCard } from "@/components/ProductCard/ProductCard";
+
+import styles from "@/styles/Home.module.scss";
+import { useProductsInfiniteQuery } from "@/features/products/products.infinite.queries";
+import type { OrderBy, SortBy } from "@/features/products/products.types";
 
 const Home: NextPage = () => {
-  const [page, setPage] = useState(1);
+  // Pelo Figma: layout “load more” com grid 4 colunas => 8 itens por clique (2 linhas)
+  const rows = 8;
 
-  // parâmetros obrigatórios da API
-  const rows = 12;
   const sortBy: SortBy = "id";
   const orderBy: OrderBy = "ASC";
 
-  const queryParams = useMemo(
-    () => ({ page, rows, sortBy, orderBy }),
-    [page, rows, sortBy, orderBy]
-  );
+  const baseParams = useMemo(() => ({ rows, sortBy, orderBy }), [rows, sortBy, orderBy]);
 
-  const { data, isLoading, isError, error, isFetching } = useProductsQuery(queryParams);
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useProductsInfiniteQuery(baseParams);
 
-  if (isLoading) return <p style={{ padding: 24 }}>Carregando...</p>;
-  if (isError) return <p style={{ padding: 24 }}>Erro: {(error as Error).message}</p>;
+  const pages = data?.pages ?? [];
+  const products = pages.flatMap((p) => p.products);
+  const total = pages[0]?.count ?? 0;
 
-  const products = data?.products ?? [];
-  const total = data?.count ?? 0;
-  const totalPages = Math.max(1, Math.ceil(total / rows));
+  const loaded = products.length;
+  const progress = total > 0 ? Math.min(100, Math.round((loaded / total) * 100)) : 0;
 
   return (
-    <main style={{ padding: 24 }}>
-      <h1 style={{ marginBottom: 8 }}>Produtos</h1>
-      <p style={{ marginTop: 0, opacity: 0.8 }}>
-        Total: {total} {isFetching ? "(atualizando...)" : ""}
-      </p>
+    <div className={styles.page}>
+      <Header />
 
-      <div
-        style={{
-          display: "grid",
-          gap: 16,
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-          marginTop: 16,
-        }}
-      >
-        {products.map((p) => (
-          <article
-            key={p.id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: 12,
-              padding: 12,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={p.image}
-              alt={p.name}
-              style={{ width: "100%", height: 160, objectFit: "contain" }}
-            />
+      <main className={styles.main}>
+        {isLoading && <p>Carregando...</p>}
 
-            <strong>{p.name}</strong>
-            <span style={{ opacity: 0.85 }}>
-              R$ {Number(p.price).toFixed(2)}
-            </span>
+        {isError && <p>Erro: {(error as Error).message}</p>}
 
-            <p style={{ margin: 0, opacity: 0.8, fontSize: 14 }}>
-              {p.description}
-            </p>
-          </article>
-        ))}
-      </div>
+        {!isLoading && !isError && (
+          <>
+            <section className={styles.grid}>
+              {products.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </section>
 
-      <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 20 }}>
-        <button onClick={() => setPage((v) => Math.max(1, v - 1))} disabled={page <= 1}>
-          Anterior
-        </button>
+            <div className={styles.loadMoreArea}>
+              <div className={styles.progressTrack} aria-label="Progresso">
+                <div
+                  className={styles.progressFill}
+                  style={{ ["--progress" as any]: `${progress}%` }}
+                />
+              </div>
 
-        <span>
-          Página {page} / {totalPages}
-        </span>
+              {hasNextPage ? (
+                <button
+                  type="button"
+                  className={styles.loadMoreButton}
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
+                >
+                  {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+                </button>
+              ) : (
+                <div className={styles.doneText}>Você já viu tudo</div>
+              )}
 
-        <button
-          onClick={() => setPage((v) => Math.min(totalPages, v + 1))}
-          disabled={page >= totalPages}
-        >
-          Próxima
-        </button>
-      </div>
-    </main>
+              {isFetching && !isFetchingNextPage ? (
+                <div style={{ opacity: 0.7, fontSize: 12 }}>Atualizando...</div>
+              ) : null}
+            </div>
+          </>
+        )}
+      </main>
+    </div>
   );
 };
 
