@@ -1,0 +1,141 @@
+.page {
+  min-height: 100vh;
+}
+
+.main {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.topBar {
+  margin-bottom: 18px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.06);
+  transition: filter 120ms ease;
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+}
+
+.backIcon {
+  display: grid;
+  place-items: center;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.imageBox {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  min-height: 420px;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+}
+
+.image {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+.info {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.description {
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.priceRow {
+  margin-top: 6px;
+}
+
+.price {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.buyBtn,
+.buyBtnAdded {
+  margin-top: 8px;
+  height: 56px;
+  border-radius: var(--radius);
+  border: none;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+}
+
+.buyBtn {
+  cursor: pointer;
+  background: var(--color-primary);
+  color: var(--color-white);
+  transition: filter 120ms ease, transform 120ms ease;
+
+  &:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0px);
+  }
+}
+
+.buyBtnAdded {
+  background: var(--color-surface-2);
+  color: var(--color-gray);
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+.goCart {
+  margin-top: 6px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 800;
+  transition: filter 120ms ease;
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+}

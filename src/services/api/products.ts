@@ -1,5 +1,10 @@
 import { apiFetch } from "@/lib/api";
-import type { ProductsResponse, SortBy, OrderBy, Product } from "@/features/products/products.types";
+import type {
+  ProductsResponse,
+  SortBy,
+  OrderBy,
+  Product,
+} from "@/features/products/products.types";
 
 export type ProductsQueryParams = {
   page: number;
@@ -8,21 +13,53 @@ export type ProductsQueryParams = {
   orderBy: OrderBy;
 };
 
-export async function getProducts(params: ProductsQueryParams): Promise<ProductsResponse> {
-  // garante params obrigatórios sempre
+export async function getProducts(
+  params: ProductsQueryParams
+): Promise<ProductsResponse> {
   return apiFetch<ProductsResponse>("/products", {
     params: {
       page: params.page,
       rows: params.rows,
       sortBy: params.sortBy,
-      orderBy: params.orderBy, // já é "ASC" | "DESC"
+      orderBy: params.orderBy,
     },
     headers: { "Content-Type": "application/json" },
   });
 }
 
-export async function getProductById(id: string | number): Promise<Product> {
-  return apiFetch<Product>(`/products/${id}`, {
-    headers: { "Content-Type": "application/json" },
-  });
+/**
+ * A API do challenge NÃO possui /products/:id.
+ * Então para "detalhe", buscamos o item varrendo páginas da listagem.
+ *
+ * - rows maior reduz requests
+ * - maxPages limita tempo de busca caso o id não exista
+ */
+export async function findProductById(options: {
+  id: string | number;
+  rows?: number;
+  sortBy?: SortBy;
+  orderBy?: OrderBy;
+  maxPages?: number;
+}): Promise<Product | null> {
+  const {
+    id,
+    rows = 50,
+    sortBy = "id",
+    orderBy = "ASC",
+    maxPages = 20,
+  } = options;
+
+  const targetId = String(id);
+
+  for (let page = 1; page <= maxPages; page++) {
+    const data = await getProducts({ page, rows, sortBy, orderBy });
+
+    const found = data.products.find((p) => String(p.id) === targetId);
+    if (found) return found;
+
+    // se já percorremos tudo, encerra
+    if (page * rows >= data.count) break;
+  }
+
+  return null;
 }

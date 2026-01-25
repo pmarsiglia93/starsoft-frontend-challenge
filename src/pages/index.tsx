@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useMemo } from "react";
+import { useRouter } from "next/router";
 
 import { Header } from "@/components/Header/Header";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
@@ -9,6 +10,8 @@ import { useProductsInfiniteQuery } from "@/features/products/products.infinite.
 import type { OrderBy, SortBy } from "@/features/products/products.types";
 
 const Home: NextPage = () => {
+  const router = useRouter();
+
   // Pelo Figma: layout “load more” com grid 4 colunas => 8 itens por clique (2 linhas)
   const rows = 8;
 
@@ -48,7 +51,11 @@ const Home: NextPage = () => {
           <>
             <section className={styles.grid}>
               {products.map((p) => (
-                <ProductCard key={p.id} product={p} />
+                <ProductCard
+                  key={p.id}
+                  product={p}
+                  onClick={() => router.push(`/products/${p.id}`)}
+                />
               ))}
             </section>
 

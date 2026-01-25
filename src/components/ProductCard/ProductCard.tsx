@@ -8,7 +8,7 @@ import { mapProductToCartItem } from "@/store/cart/cart.mappers";
 
 type Props = {
   product: Product;
-  onClick?: () => void; // pra detalhes depois (opcional)
+  onClick?: () => void;
 };
 
 export function ProductCard({ product, onClick }: Props) {
@@ -24,14 +24,20 @@ export function ProductCard({ product, onClick }: Props) {
     return n.toFixed(2);
   }, [product.price]);
 
-  function handleBuy() {
+  function handleBuy(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation(); // opcional (bom quando o card navega)
     if (isInCart) return;
     dispatch(addToCart(mapProductToCartItem(product)));
   }
 
   return (
     <article className={styles.card}>
-      <button type="button" className={styles.media} onClick={onClick} aria-label={`Abrir ${product.name}`}>
+      <button
+        type="button"
+        className={styles.media}
+        onClick={onClick}
+        aria-label={`Abrir ${product.name}`}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className={styles.image} src={product.image} alt={product.name} />
       </button>
@@ -45,7 +51,6 @@ export function ProductCard({ product, onClick }: Props) {
 
         <div className={styles.priceRow}>
           <span className={styles.ethIcon} aria-hidden="true">
-            {/* ícone ETH simples (pode trocar depois pelo do Figma) */}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M12 2l7 10-7 4-7-4 7-10Z" fill="var(--color-white)" opacity="0.9" />
               <path d="M12 22l7-10-7 4-7-4 7 10Z" fill="var(--color-white)" opacity="0.6" />
@@ -58,7 +63,7 @@ export function ProductCard({ product, onClick }: Props) {
           type="button"
           className={isInCart ? styles.buyButtonAdded : styles.buyButton}
           onClick={handleBuy}
-          disabled={isInCart}
+          disabled={isInCart} // se você quiser “clicável mas sem ação”, remova isso
         >
           {isInCart ? "ADICIONADO AO CARRINHO" : "COMPRAR"}
         </button>
