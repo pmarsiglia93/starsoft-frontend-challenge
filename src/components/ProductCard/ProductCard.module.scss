@@ -17,14 +17,18 @@
   box-shadow: var(--shadow-card);
 
   height: 220px;
+
+  /* IMPORTANTE pro next/image com fill */
+  position: relative;
+
   display: grid;
   place-items: center;
 }
 
 .image {
-  width: 78%;
-  height: 78%;
+  /* para o Image fill */
   object-fit: contain;
+  padding: 18px; /* mantém o “respiro” parecido com o 78% */
 }
 
 .content {

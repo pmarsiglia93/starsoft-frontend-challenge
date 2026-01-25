@@ -139,3 +139,18 @@
     filter: brightness(1.08);
   }
 }
+
+.imageBox {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  /* define altura/área pra imagem existir */
+  min-height: 520px; /* ajusta pro Figma */
+}
+
+.image {
+  object-fit: contain;
+  padding: 24px;
+}
+

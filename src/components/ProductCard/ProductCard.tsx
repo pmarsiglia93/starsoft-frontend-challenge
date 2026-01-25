@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import Image from "next/image";
 import styles from "./ProductCard.module.scss";
 import type { Product } from "@/features/products/products.types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -24,8 +25,7 @@ export function ProductCard({ product, onClick }: Props) {
     return n.toFixed(2);
   }, [product.price]);
 
-  function handleBuy(e: React.MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation(); // opcional (bom quando o card navega)
+  function handleBuy() {
     if (isInCart) return;
     dispatch(addToCart(mapProductToCartItem(product)));
   }
@@ -38,8 +38,14 @@ export function ProductCard({ product, onClick }: Props) {
         onClick={onClick}
         aria-label={`Abrir ${product.name}`}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className={styles.image} src={product.image} alt={product.name} />
+        <Image
+          className={styles.image}
+          src={product.image}
+          alt={product.name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          priority={false}
+        />
       </button>
 
       <div className={styles.content}>
@@ -63,7 +69,7 @@ export function ProductCard({ product, onClick }: Props) {
           type="button"
           className={isInCart ? styles.buyButtonAdded : styles.buyButton}
           onClick={handleBuy}
-          disabled={isInCart} // se você quiser “clicável mas sem ação”, remova isso
+          disabled={isInCart}
         >
           {isInCart ? "ADICIONADO AO CARRINHO" : "COMPRAR"}
         </button>
