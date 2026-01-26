@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+// src/components/Cart/CheckoutModal.tsx
+import { useEffect, useRef } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import styles from "./CheckoutModal.module.scss";
 
 type Props = {
@@ -11,39 +12,94 @@ type Props = {
   onFinish: () => void;
 };
 
-export function CheckoutModal({ open, finished, qty, total, onClose, onFinish }: Props) {
+export function CheckoutModal({
+  open,
+  finished,
+  qty,
+  total,
+  onClose,
+  onFinish,
+}: Props) {
+  const reduceMotion = useReducedMotion();
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  // ESC + foco + scroll lock
   useEffect(() => {
+    if (!open) return;
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    // foca o modal quando abre
+    const t = window.setTimeout(() => {
+      dialogRef.current?.focus();
+    }, 0);
+
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
     }
-    if (open) window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.clearTimeout(t);
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, [open, onClose]);
 
+  const overlayVariants = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
+
+  const modalVariants = reduceMotion
+    ? {
+        hidden: { opacity: 0 },
+        show: { opacity: 1 },
+        exit: { opacity: 0 },
+      }
+    : {
+        hidden: { opacity: 0, y: 16, scale: 0.98 },
+        show: { opacity: 1, y: 0, scale: 1 },
+        exit: { opacity: 0, y: 16, scale: 0.98 },
+      };
+
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait" initial={false}>
       {open && (
         <motion.div
           className={styles.overlay}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          variants={overlayVariants}
+          initial="hidden"
+          animate="show"
+          exit="exit"
+          transition={{ duration: 0.18, ease: "easeOut" }}
           onMouseDown={(e) => {
-            // fecha clicando fora
             if (e.target === e.currentTarget) onClose();
           }}
+          aria-hidden={false}
         >
           <motion.div
+            ref={dialogRef}
             className={styles.modal}
-            initial={{ opacity: 0, y: 18, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 18, scale: 0.98 }}
-            transition={{ duration: 0.18 }}
+            variants={modalVariants}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            transition={{ duration: 0.18, ease: "easeOut" }}
             role="dialog"
             aria-modal="true"
             aria-label="Checkout"
+            tabIndex={-1}
           >
-            <button type="button" className={styles.close} onClick={onClose} aria-label="Fechar">
+            <button
+              type="button"
+              className={styles.close}
+              onClick={onClose}
+              aria-label="Fechar"
+            >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M6 6l12 12M18 6L6 18"

@@ -12,7 +12,6 @@
   margin-top: 40px;
   display: grid;
   gap: 28px;
-
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
@@ -55,35 +54,64 @@
   width: var(--progress, 0%);
   background: var(--color-primary);
   border-radius: 999px;
+
+  /* deixa a barra “viva” quando muda */
+  transition: width 220ms ease;
 }
 
+/* Botão "Carregar mais" mais Figma: lift + glow */
 .loadMoreButton {
   width: 320px;
   height: 56px;
 
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: var(--radius);
 
   background: var(--color-surface-2);
   color: var(--color-white);
 
-  font-weight: 600;
-  letter-spacing: 0.4px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
 
   cursor: pointer;
-  transition: filter 120ms ease;
+
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease,
+    border-color 160ms ease;
 }
 
 .loadMoreButton:hover {
   filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.loadMoreButton:active {
+  transform: translateY(0px);
+  filter: brightness(1.02);
+}
+
+.loadMoreButton:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 3px;
 }
 
 .loadMoreButton:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .doneText {
   opacity: 0.9;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+/* respeita usuários que pedem menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  .progressFill,
+  .loadMoreButton {
+    transition: none;
+  }
 }

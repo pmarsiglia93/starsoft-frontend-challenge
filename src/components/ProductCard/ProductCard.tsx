@@ -1,5 +1,8 @@
 import { useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+
 import styles from "./ProductCard.module.scss";
 import type { Product } from "@/features/products/products.types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -9,12 +12,14 @@ import { mapProductToCartItem } from "@/store/cart/cart.mappers";
 
 type Props = {
   product: Product;
-  onClick?: () => void;
+  onClick?: () => void; // opcional: se você quiser controlar navegação por router
+  index?: number; // opcional: stagger no grid
 };
 
-export function ProductCard({ product, onClick }: Props) {
+export function ProductCard({ product, onClick, index = 0 }: Props) {
   const dispatch = useAppDispatch();
   const itemsMap = useAppSelector(selectCartItemsMap);
+  const reduceMotion = useReducedMotion();
 
   const id = String(product.id);
   const isInCart = Boolean(itemsMap[id]);
@@ -30,23 +35,41 @@ export function ProductCard({ product, onClick }: Props) {
     dispatch(addToCart(mapProductToCartItem(product)));
   }
 
+  const detailsHref = `/products/${product.id}`;
+
   return (
-    <article className={styles.card}>
-      <button
-        type="button"
+    <motion.article
+      className={styles.card}
+      initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+      animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.18,
+        ease: "easeOut",
+        delay: Math.min(index * 0.03, 0.25),
+      }}
+      whileHover={reduceMotion ? undefined : { y: -2 }}
+    >
+      {/* Imagem clicável: Link (Next) é o melhor padrão */}
+      <motion.div
         className={styles.media}
-        onClick={onClick}
-        aria-label={`Abrir ${product.name}`}
+        whileTap={reduceMotion ? undefined : { scale: 0.98 }}
       >
-        <Image
-          className={styles.image}
-          src={product.image}
-          alt={product.name}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          priority={false}
-        />
-      </button>
+        <Link
+          href={detailsHref}
+          aria-label={`Abrir detalhes de ${product.name}`}
+          onClick={onClick}
+          className={styles.mediaLink}
+        >
+          <Image
+            className={styles.image}
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            priority={false}
+          />
+        </Link>
+      </motion.div>
 
       <div className={styles.content}>
         <h3 className={styles.title} title={product.name}>
@@ -58,22 +81,43 @@ export function ProductCard({ product, onClick }: Props) {
         <div className={styles.priceRow}>
           <span className={styles.ethIcon} aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2l7 10-7 4-7-4 7-10Z" fill="var(--color-white)" opacity="0.9" />
-              <path d="M12 22l7-10-7 4-7-4 7 10Z" fill="var(--color-white)" opacity="0.6" />
+              <path
+                d="M12 2l7 10-7 4-7-4 7-10Z"
+                fill="var(--color-white)"
+                opacity="0.9"
+              />
+              <path
+                d="M12 22l7-10-7 4-7-4 7 10Z"
+                fill="var(--color-white)"
+                opacity="0.6"
+              />
             </svg>
           </span>
           <span className={styles.price}>{priceEth} ETH</span>
         </div>
 
-        <button
+        {/* CTA de detalhes: "Veja mais" (pra ficar mais próximo do Figma) */}
+        <Link
+          href={detailsHref}
+          onClick={onClick}
+          className={styles.seeMore}
+          aria-label={`Ver mais sobre ${product.name}`}
+        >
+          VEJA MAIS
+        </Link>
+
+        <motion.button
           type="button"
           className={isInCart ? styles.buyButtonAdded : styles.buyButton}
           onClick={handleBuy}
           disabled={isInCart}
+          whileHover={reduceMotion || isInCart ? undefined : { scale: 1.02 }}
+          whileTap={reduceMotion || isInCart ? undefined : { scale: 0.98 }}
+          transition={{ duration: 0.12 }}
         >
           {isInCart ? "ADICIONADO AO CARRINHO" : "COMPRAR"}
-        </button>
+        </motion.button>
       </div>
-    </article>
+    </motion.article>
   );
 }
