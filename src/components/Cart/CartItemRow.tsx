@@ -11,7 +11,6 @@ type Props = {
 export function CartItemRow({ item }: Props) {
   const dispatch = useAppDispatch();
 
-  // tenta pegar description sem quebrar caso não exista no type atual
   const description =
     (item as unknown as { description?: string }).description ??
     "Redesigned from scratch and completely revised.";
@@ -19,8 +18,15 @@ export function CartItemRow({ item }: Props) {
   return (
     <article className={styles.row}>
       <div className={styles.imageBox}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className={styles.image} src={item.imageUrl} alt={item.name} />
+        <Image
+          className={styles.image}
+          src={item.imageUrl}
+          alt={item.name}
+          width={161}
+          height={161}
+          sizes="(max-width: 680px) 120px, 161px"
+          priority={false}
+        />
       </div>
 
       <div className={styles.info}>

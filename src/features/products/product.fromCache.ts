@@ -33,7 +33,6 @@ export function useProductFromCache(id?: string) {
     for (const [, data] of all) {
       if (!data) continue;
 
-      // infinite query: { pages: [...] }
       if (hasPages(data) && data.pages?.length) {
         for (const page of data.pages) {
           const found = page?.products?.find((p) => String(p.id) === id);
@@ -41,7 +40,6 @@ export function useProductFromCache(id?: string) {
         }
       }
 
-      // query normal: { products: [...] }
       if ("products" in data && data.products?.length) {
         const found = data.products.find((p) => String(p.id) === id);
         if (found) return found;

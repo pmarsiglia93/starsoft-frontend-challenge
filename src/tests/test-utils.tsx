@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import cartReducer from "@/store/cart/cart.slice";
 
-// ✅ Estado raiz do app (só cart por enquanto)
 type RootState = {
   cart: ReturnType<typeof cartReducer>;
 };
@@ -24,10 +23,6 @@ function makeQueryClient() {
   });
 }
 
-/**
- * ✅ Sem PreloadedState (evita conflito de tipos com redux)
- * Usa Partial<RootState> e faz cast seguro no configureStore.
- */
 export function makeStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     reducer: {

@@ -27,13 +27,6 @@ export async function getProducts(
   });
 }
 
-/**
- * A API do challenge NÃO possui /products/:id.
- * Então para "detalhe", buscamos o item varrendo páginas da listagem.
- *
- * - rows maior reduz requests
- * - maxPages limita tempo de busca caso o id não exista
- */
 export async function findProductById(options: {
   id: string | number;
   rows?: number;
@@ -57,7 +50,6 @@ export async function findProductById(options: {
     const found = data.products.find((p) => String(p.id) === targetId);
     if (found) return found;
 
-    // se já percorremos tudo, encerra
     if (page * rows >= data.count) break;
   }
 

@@ -32,8 +32,6 @@ const HomePage: NextPage<Props> = ({ dehydratedState }) => {
 
 function HomeContent() {
   const router = useRouter();
-
-  // Figma: grid 4 colunas e botão "Carregar mais" (2 linhas => 8 itens)
   const rows = 8;
   const sortBy: SortBy = "id";
   const orderBy: OrderBy = "ASC";

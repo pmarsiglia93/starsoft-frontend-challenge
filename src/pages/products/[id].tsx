@@ -13,11 +13,7 @@ import { useProductByIdQuery } from "@/features/products/product.queries";
 const ProductDetailsPage: NextPage = () => {
   const router = useRouter();
   const id = typeof router.query.id === "string" ? router.query.id : undefined;
-
-  // 1) tenta do cache (se veio do Home)
   const cached = useProductFromCache(id);
-
-  // 2) se não tiver cache, busca "por varredura" via listagem
   const { data, isLoading, isError } = useProductByIdQuery(
     !cached ? id : undefined,
   );

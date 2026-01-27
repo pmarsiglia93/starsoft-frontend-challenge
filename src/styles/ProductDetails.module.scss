@@ -5,8 +5,6 @@
 .main {
   max-width: var(--container-max);
   margin: 0 auto;
-
-  /* antes: 40px 24px 64px */
   padding: var(--space-5) var(--space-4) var(--space-7);
 }
 
@@ -18,12 +16,9 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-
   padding: 10px 12px;
   border-radius: var(--radius);
-
   background: rgba(255, 255, 255, 0.06);
-
   transition: filter 120ms ease, transform 120ms ease;
 
   &:hover {
@@ -61,20 +56,12 @@
 .imageBox {
   position: relative;
   overflow: hidden;
-
   border-radius: var(--radius);
   background: var(--color-surface);
-
-  /* mantém visual do card */
   box-shadow: var(--shadow-card);
-
-  /* define área pra imagem existir (Figma) */
   min-height: 520px;
-
   display: grid;
   place-items: center;
-
-  /* padding interno do Figma */
   padding: 24px;
 }
 

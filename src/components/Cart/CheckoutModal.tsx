@@ -1,4 +1,3 @@
-// src/components/Cart/CheckoutModal.tsx
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import styles from "./CheckoutModal.module.scss";

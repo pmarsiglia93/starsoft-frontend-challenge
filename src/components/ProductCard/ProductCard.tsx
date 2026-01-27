@@ -28,7 +28,7 @@ export function ProductCard({ product, onClick, index = 0 }: Props) {
     const n = Number(product.price);
     if (Number.isNaN(n)) return "0";
     if (Number.isInteger(n)) return String(n);
-    return String(Number(n.toFixed(2))); // remove zeros desnecessários (ex: 12.50 -> 12.5)
+    return String(Number(n.toFixed(2)));
   }, [product.price]);
 
   function handleBuy() {
@@ -93,7 +93,6 @@ export function ProductCard({ product, onClick, index = 0 }: Props) {
             <span className={styles.price}>{priceEth} ETH</span>
           </div>
 
-          {/* Mantido para não arriscar quebrar testes, mas sem afetar layout (pixel perfect) */}
           <Link
             href={detailsHref}
             onClick={onClick}

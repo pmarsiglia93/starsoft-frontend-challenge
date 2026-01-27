@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -25,8 +26,6 @@ const CartPage: NextPage = () => {
 
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-
-  // snapshot do total para mostrar no modal mesmo se limpar o carrinho
   const snapshot = useMemo(() => {
     return {
       qty: totalQty,
@@ -51,6 +50,8 @@ const CartPage: NextPage = () => {
 
   const isEmpty = items.length === 0;
 
+  const totalEthText = totalPrice.toFixed(0); 
+
   return (
     <div className={styles.page}>
       <Header />
@@ -61,9 +62,16 @@ const CartPage: NextPage = () => {
             href="/"
             className={styles.backBtn}
             aria-label="Voltar para produtos"
+            title="Voltar"
           >
-            {/* aqui você já está usando back.svg no componente, então ok */}
-            Voltar
+            <Image
+              src="/assets/icons/back.svg"
+              alt="Voltar"
+              className={styles.backIcon}
+              width={60}
+              height={60}
+              priority
+            />
           </Link>
 
           <h1 className={styles.title}>Mochila de Compras</h1>
@@ -87,17 +95,21 @@ const CartPage: NextPage = () => {
               ))}
             </section>
 
-            {/* ✅ mantém ASIDE para o teste achar + adiciona testid robusto */}
-            <aside data-testid="cart-summary">
+            <aside className={styles.summary} data-testid="cart-summary">
               <div className={styles.totalRow}>
-                <span className={styles.totalLabel}>Itens</span>
-                <span className={styles.totalValue}>{totalQty}</span>
-              </div>
+                <span className={styles.totalLabel}>TOTAL</span>
 
-              <div className={styles.totalRow}>
-                <span className={styles.totalLabel}>Total</span>
                 <span className={styles.totalValue}>
-                  {totalPrice.toFixed(2)} ETH
+                  <span className={styles.totalEthIcon} aria-hidden="true">
+                    <Image
+                      src="/assets/icons/eth-logo.svg"
+                      alt=""
+                      width={29}
+                      height={29}
+                    />
+                  </span>
+
+                  {totalEthText} ETH
                 </span>
               </div>
 

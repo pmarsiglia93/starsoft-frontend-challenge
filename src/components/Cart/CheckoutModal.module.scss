@@ -97,16 +97,11 @@
 .finishBtn,
 .finishBtnDone {
   width: 100%;
-
-  /* mantém coerente com botões do projeto */
   height: 56px;
-
   border-radius: var(--radius);
   border: none;
-
   font-weight: 900;
   letter-spacing: 0.6px;
-
   transition: filter 120ms ease, transform 120ms ease;
 }
 

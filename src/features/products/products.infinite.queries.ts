@@ -24,7 +24,7 @@ export function useProductsInfiniteQuery(params: InfiniteParams) {
       const total = lastPage.count ?? 0;
 
       if (loaded >= total) return undefined;
-      return allPages.length + 1; // próxima página (1-based)
+      return allPages.length + 1;
     },
     placeholderData: keepPreviousData,
     staleTime: 30_000,
