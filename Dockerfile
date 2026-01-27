@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# ---------- build ----------
+# ---------- builder ----------
 FROM node:20-alpine AS builder
 WORKDIR /app
 
@@ -26,8 +26,12 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/next.config.* ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
+
+# ✅ Permissão pro next/image criar cache
+RUN mkdir -p /app/.next/cache/images && chown -R nextjs:nodejs /app/.next
 
 USER nextjs
 
