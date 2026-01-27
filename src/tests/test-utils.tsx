@@ -47,14 +47,20 @@ type ExtendedRenderOptions = Omit<RenderOptions, "queries"> & {
 
 export function renderWithProviders(
   ui: React.ReactElement,
-  { preloadedState, store = makeStore(preloadedState), ...renderOptions }: ExtendedRenderOptions = {}
+  {
+    preloadedState,
+    store = makeStore(preloadedState),
+    ...renderOptions
+  }: ExtendedRenderOptions = {},
 ) {
   const queryClient = makeQueryClient();
 
   function Wrapper({ children }: PropsWithChildren) {
     return (
       <Provider store={store}>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
       </Provider>
     );
   }

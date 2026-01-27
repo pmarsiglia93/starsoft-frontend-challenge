@@ -9,7 +9,10 @@ describe("CartPage", () => {
   it("renderiza totais, abre modal e ao finalizar compra limpa carrinho e mostra estado vazio", async () => {
     const user = userEvent.setup();
 
-    const store = makeStore({
+    // ✅ pega o tipo do preloadedState direto do makeStore (sem importar RootState)
+    type PreloadedState = NonNullable<Parameters<typeof makeStore>[0]>;
+
+    const preloadedState = {
       cart: {
         items: {
           "1": {
@@ -20,8 +23,10 @@ describe("CartPage", () => {
             quantity: 2,
           },
         },
-      } as any,
-    });
+      },
+    } satisfies PreloadedState;
+
+    const store = makeStore(preloadedState);
 
     renderWithProviders(<CartPage />, { store });
 
@@ -29,7 +34,9 @@ describe("CartPage", () => {
     expect(screen.getByText(/produto teste/i)).toBeInTheDocument();
 
     // ✅ Em vez de procurar "2" solto, valida especificamente dentro do summary
-    const summary = document.querySelector("aside.summary") ?? document.querySelector("aside");
+    const summary =
+      document.querySelector("aside.summary") ??
+      document.querySelector("aside");
     expect(summary).toBeTruthy();
 
     const summaryScope = within(summary as HTMLElement);
@@ -44,7 +51,9 @@ describe("CartPage", () => {
     const totalLabel = summaryScope.getByText(/^total$/i);
     const totalRow = totalLabel.closest("div");
     expect(totalRow).toBeTruthy();
-    expect(within(totalRow as HTMLElement).getByText(/20\.00\s*ETH/i)).toBeInTheDocument();
+    expect(
+      within(totalRow as HTMLElement).getByText(/20\.00\s*ETH/i),
+    ).toBeInTheDocument();
 
     // Abre modal
     const openBtn = screen.getByRole("button", { name: /finalizar compra/i });
@@ -61,7 +70,9 @@ describe("CartPage", () => {
     await user.click(finishInsideModal);
 
     // Página deve mostrar estado vazio após clearCart
-    expect(await screen.findByText(/sua mochila está vazia/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/sua mochila está vazia/i),
+    ).toBeInTheDocument();
 
     // Store realmente limpa
     expect(Object.keys(store.getState().cart.items)).toHaveLength(0);

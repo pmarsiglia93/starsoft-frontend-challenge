@@ -105,7 +105,9 @@
   cursor: pointer;
   background: var(--color-primary);
   color: var(--color-white);
-  transition: filter 120ms ease, transform 120ms ease;
+  transition:
+    filter 120ms ease,
+    transform 120ms ease;
 
   &:hover {
     filter: brightness(1.05);
@@ -153,4 +155,3 @@
   object-fit: contain;
   padding: 24px;
 }
-

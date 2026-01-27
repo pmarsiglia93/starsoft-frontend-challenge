@@ -18,7 +18,9 @@ const ProductDetailsPage: NextPage = () => {
   const cached = useProductFromCache(id);
 
   // 2) se não tiver cache, busca "por varredura" via listagem
-  const { data, isLoading, isError } = useProductByIdQuery(!cached ? id : undefined);
+  const { data, isLoading, isError } = useProductByIdQuery(
+    !cached ? id : undefined,
+  );
 
   const product = cached ?? data ?? null;
 
@@ -62,7 +64,9 @@ const ProductDetailsPage: NextPage = () => {
               <p className={styles.description}>{product.description}</p>
 
               <div className={styles.priceRow}>
-                <span className={styles.price}>{Number(product.price).toFixed(2)} ETH</span>
+                <span className={styles.price}>
+                  {Number(product.price).toFixed(2)} ETH
+                </span>
               </div>
             </div>
           </section>

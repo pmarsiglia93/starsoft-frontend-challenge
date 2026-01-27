@@ -40,7 +40,7 @@ function HomeContent() {
 
   const baseParams = useMemo(
     () => ({ rows, sortBy, orderBy }),
-    [rows, sortBy, orderBy]
+    [rows, sortBy, orderBy],
   );
 
   const {
@@ -91,7 +91,7 @@ function HomeContent() {
               <div className={styles.progressTrack} aria-label="Progresso">
                 <div
                   className={styles.progressFill}
-                  style={{ ["--progress" as any]: `${progress}%` }}
+                  style={{ "--progress": `${progress}%` } as React.CSSProperties}
                 />
               </div>
 
@@ -122,7 +122,11 @@ function HomeContent() {
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const queryClient = new QueryClient();
 
-  const baseParams = { rows: 8, sortBy: "id" as const, orderBy: "ASC" as const };
+  const baseParams = {
+    rows: 8,
+    sortBy: "id" as const,
+    orderBy: "ASC" as const,
+  };
 
   // ✅ ESSA KEY PRECISA BATER COM: ["products-infinite", params]
   await queryClient.prefetchInfiniteQuery({

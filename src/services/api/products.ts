@@ -14,7 +14,7 @@ export type ProductsQueryParams = {
 };
 
 export async function getProducts(
-  params: ProductsQueryParams
+  params: ProductsQueryParams,
 ): Promise<ProductsResponse> {
   return apiFetch<ProductsResponse>("/products", {
     params: {

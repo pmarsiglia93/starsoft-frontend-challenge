@@ -17,28 +17,35 @@
 }
 
 .logo {
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  color: var(--color-primary);
-  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 0; // evita “sobra” vertical
 }
 
 .cart {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px; // contador “colado” como no Figma
 }
 
 .cartIcon {
-  display: grid;
-  place-items: center;
+  width: 33px;
+  height: 33px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 .cartCount {
-  min-width: 18px;
-  text-align: center;
-  font-size: 14px;
+  font-size: 20px; // ajuste fino depois pelo Figma
   font-weight: 600;
+  line-height: 1;
   color: var(--color-white);
-  opacity: 0.9;
 }
+
+.logo img {
+  width: 101px;
+  height: 38px;
+}
+

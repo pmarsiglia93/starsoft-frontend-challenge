@@ -80,7 +80,9 @@
   cursor: pointer;
   font-weight: 900;
   letter-spacing: 0.6px;
-  transition: filter 120ms ease, transform 120ms ease;
+  transition:
+    filter 120ms ease,
+    transform 120ms ease;
 }
 
 .finishBtn {

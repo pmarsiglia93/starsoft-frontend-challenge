@@ -20,10 +20,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (
-      state,
-      action: PayloadAction<Omit<CartItem, "quantity">>
-    ) => {
+    addToCart: (state, action: PayloadAction<Omit<CartItem, "quantity">>) => {
       const item = action.payload;
       const existing = state.items[item.id];
 

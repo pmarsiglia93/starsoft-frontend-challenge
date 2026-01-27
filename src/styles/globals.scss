@@ -19,7 +19,14 @@ body {
 
   /* A fonte final vem do next/font no _app.tsx (classe no wrapper)
      Isso aqui é fallback caso algo falhe */
-  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:
+    "Poppins",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

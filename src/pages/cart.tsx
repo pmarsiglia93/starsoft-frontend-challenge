@@ -59,7 +59,11 @@ const CartPage: NextPage = () => {
 
       <main className={styles.main}>
         <div className={styles.topBar}>
-          <Link href="/" className={styles.backBtn} aria-label="Voltar para produtos">
+          <Link
+            href="/"
+            className={styles.backBtn}
+            aria-label="Voltar para produtos"
+          >
             <span className={styles.backIcon} aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path
@@ -80,7 +84,9 @@ const CartPage: NextPage = () => {
         {isEmpty ? (
           <div className={styles.empty}>
             <p className={styles.emptyTitle}>Sua mochila está vazia</p>
-            <p className={styles.emptyText}>Volte para a vitrine e adicione alguns produtos.</p>
+            <p className={styles.emptyText}>
+              Volte para a vitrine e adicione alguns produtos.
+            </p>
             <Link className={styles.emptyCta} href="/">
               Ir para produtos
             </Link>
@@ -102,7 +108,9 @@ const CartPage: NextPage = () => {
 
                 <div className={styles.summaryRow}>
                   <span className={styles.summaryLabel}>Total</span>
-                  <span className={styles.summaryValue}>{totalPrice.toFixed(2)} ETH</span>
+                  <span className={styles.summaryValue}>
+                    {totalPrice.toFixed(2)} ETH
+                  </span>
                 </div>
 
                 <button

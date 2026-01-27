@@ -23,7 +23,8 @@ const customJestConfig = {
     "^.+\\.(css|sass|scss)$": "<rootDir>/src/tests/styleMock.ts",
 
     // Assets
-    "^.+\\.(png|jpg|jpeg|gif|webp|avif|svg)$": "<rootDir>/src/tests/fileMock.ts",
+    "^.+\\.(png|jpg|jpeg|gif|webp|avif|svg)$":
+      "<rootDir>/src/tests/fileMock.ts",
   },
 };
 

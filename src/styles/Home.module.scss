@@ -64,7 +64,7 @@
   width: 320px;
   height: 56px;
 
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius);
 
   background: var(--color-surface-2);
@@ -75,7 +75,10 @@
 
   cursor: pointer;
 
-  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease,
+  transition:
+    transform 160ms ease,
+    filter 160ms ease,
+    box-shadow 160ms ease,
     border-color 160ms ease;
 }
 
