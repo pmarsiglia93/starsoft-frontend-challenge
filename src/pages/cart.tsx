@@ -45,9 +45,7 @@ const CartPage: NextPage = () => {
   }
 
   function handleFinishPurchase() {
-    // comportamento bem "Figma": finaliza e mostra estado final no botão
     setIsFinished(true);
-    // limpa carrinho (se você preferir limpar só ao fechar, é só mover isso pro closeCheckout)
     dispatch(clearCart());
   }
 
@@ -64,17 +62,7 @@ const CartPage: NextPage = () => {
             className={styles.backBtn}
             aria-label="Voltar para produtos"
           >
-            <span className={styles.backIcon} aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M15 18l-6-6 6-6"
-                  stroke="var(--color-white)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
+            {/* aqui você já está usando back.svg no componente, então ok */}
             Voltar
           </Link>
 
@@ -99,29 +87,28 @@ const CartPage: NextPage = () => {
               ))}
             </section>
 
-            <aside className={styles.summary}>
-              <div className={styles.summaryBox}>
-                <div className={styles.summaryRow}>
-                  <span className={styles.summaryLabel}>Itens</span>
-                  <span className={styles.summaryValue}>{totalQty}</span>
-                </div>
-
-                <div className={styles.summaryRow}>
-                  <span className={styles.summaryLabel}>Total</span>
-                  <span className={styles.summaryValue}>
-                    {totalPrice.toFixed(2)} ETH
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  className={styles.finishBtn}
-                  onClick={openCheckout}
-                  disabled={isEmpty}
-                >
-                  FINALIZAR COMPRA
-                </button>
+            {/* ✅ mantém ASIDE para o teste achar + adiciona testid robusto */}
+            <aside data-testid="cart-summary">
+              <div className={styles.totalRow}>
+                <span className={styles.totalLabel}>Itens</span>
+                <span className={styles.totalValue}>{totalQty}</span>
               </div>
+
+              <div className={styles.totalRow}>
+                <span className={styles.totalLabel}>Total</span>
+                <span className={styles.totalValue}>
+                  {totalPrice.toFixed(2)} ETH
+                </span>
+              </div>
+
+              <button
+                type="button"
+                className={styles.finishBtn}
+                onClick={openCheckout}
+                disabled={isEmpty}
+              >
+                FINALIZAR COMPRA
+              </button>
             </aside>
           </div>
         )}

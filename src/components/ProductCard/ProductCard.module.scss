@@ -1,45 +1,47 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+
+  /* NÃO fixa largura: deixa o grid controlar */
+  width: 100%;
+
+  /* Mantém “sensação Figma” sem quebrar no menor */
+  min-height: 555px;
+
+  padding: 16px;
+  border-radius: var(--radius, 8px);
+
+  background: var(--color-surface, #191a20);
+  box-shadow: var(--shadow-soft);
+
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  margin: 0; /* não somar com gap */
 }
 
-/* Hover do card deixa tudo mais “vivo” */
-.card:hover .media {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+.card:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
 }
 
-.card:hover .image {
-  transform: scale(1.02);
-}
-
+/* Área da imagem */
 .media {
   width: 100%;
-  padding: 0;
-  border: none;
-  cursor: pointer;
-  background: var(--color-surface);
 
-  border-radius: var(--radius);
+  /* Altura responsiva (mantém proporção boa) */
+  height: clamp(220px, 18vw, 258px);
+
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius, 8px);
   overflow: hidden;
-  box-shadow: var(--shadow-card);
 
-  height: 220px;
-
-  /* IMPORTANTE pro next/image com fill */
   position: relative;
 
   display: grid;
   place-items: center;
 
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    filter 160ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
-/* Link ocupando a área toda pra imagem clicável funcionar */
+/* Link ocupando a área toda */
 .mediaLink {
   display: block;
   position: relative;
@@ -47,21 +49,33 @@
   height: 100%;
 }
 
-/* para o Image fill */
 .image {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   padding: 18px;
-
   transition: transform 160ms ease;
+}
+
+.card:hover .image {
+  transform: scale(1.02);
 }
 
 .mediaLink:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.55);
   outline-offset: 3px;
-  border-radius: var(--radius);
+  border-radius: var(--radius, 8px);
 }
 
+/* Conteúdo geral */
 .content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: 20px;
+}
+
+.textBlock {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -69,9 +83,9 @@
 
 .title {
   margin: 0;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  line-height: 1.2;
 
   white-space: nowrap;
   overflow: hidden;
@@ -94,76 +108,67 @@
 .priceRow {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 4px;
+  gap: 10px;
+  margin-top: 6px;
 }
 
 .ethIcon {
+  width: 29px;
+  height: 29px;
+
   display: inline-grid;
   place-items: center;
-  opacity: 0.95;
+}
+
+.ethImage {
+  display: block;
+  width: 29px;
+  height: 29px;
 }
 
 .price {
   font-weight: 800;
-  font-size: 14px;
+  font-size: 20px;
+  line-height: 1;
 }
 
-/* CTA "Veja mais" */
-.seeMore {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-
-  margin-top: 2px;
-
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 0.6px;
-
-  color: var(--color-white);
-  opacity: 0.9;
-
-  transition:
-    opacity 120ms ease,
-    transform 120ms ease;
+/* Link “VEJA MAIS” (sr-only) */
+.srOnlyLink {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-.seeMore:hover {
-  opacity: 1;
-  transform: translateY(-1px);
-}
-
-.seeMore:active {
-  transform: translateY(0px);
-}
-
-.seeMore:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.55);
-  outline-offset: 3px;
-  border-radius: 6px;
-}
-
+/* Botão */
 .buyButton,
 .buyButtonAdded {
-  height: 56px;
-  border-radius: var(--radius);
+  /* NÃO fixa: ocupa a largura do card com respiro */
+  width: 100%;
+  height: 66px;
+
+  border-radius: var(--radius, 8px);
   border: none;
 
   font-weight: 800;
   letter-spacing: 0.6px;
 
-  transition:
-    transform 140ms ease,
-    filter 140ms ease,
-    box-shadow 140ms ease;
+  align-self: stretch;
+  margin-top: auto;
+
+  transition: transform 140ms ease, filter 140ms ease, box-shadow 140ms ease;
 }
 
 .buyButton {
-  background: var(--color-primary);
+  background: var(--color-primary, #ff8310);
   color: var(--color-white);
   cursor: pointer;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
 }
 
 .buyButton:hover {
@@ -181,8 +186,8 @@
 }
 
 .buyButtonAdded {
-  background: var(--color-surface-2);
-  color: var(--color-gray);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
   cursor: not-allowed;
   opacity: 0.9;
   box-shadow: none;
@@ -199,12 +204,15 @@
   .media,
   .image,
   .buyButton,
-  .seeMore {
+  .card {
     transition: none;
   }
 
-  .card:hover .media,
   .card:hover .image {
     transform: none;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-soft);
   }
 }

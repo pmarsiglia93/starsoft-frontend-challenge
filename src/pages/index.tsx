@@ -1,5 +1,5 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 
 import {
@@ -86,7 +86,6 @@ function HomeContent() {
               ))}
             </section>
 
-            {/* ✅ BOTÃO QUE VOCÊ QUERIA (CARREGAR MAIS) */}
             <div className={styles.loadMoreArea}>
               <div className={styles.progressTrack} aria-label="Progresso">
                 <div
@@ -102,10 +101,10 @@ function HomeContent() {
                   onClick={() => fetchNextPage()}
                   disabled={isFetchingNextPage}
                 >
-                  {isFetchingNextPage ? "Carregando..." : "CARREGAR MAIS"}
+                  {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
                 </button>
               ) : (
-                <div className={styles.doneText}>Você já viu tudo</div>
+                <div className={styles.doneButton}>Você já viu tudo</div>
               )}
 
               {isFetching && !isFetchingNextPage ? (
@@ -115,6 +114,12 @@ function HomeContent() {
           </>
         )}
       </main>
+
+      <footer className={styles.footer}>
+        <div className={styles.footerText}>
+          STARSOFT © TODOS OS DIREITOS RESERVADOS
+        </div>
+      </footer>
     </div>
   );
 }
@@ -128,7 +133,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
     orderBy: "ASC" as const,
   };
 
-  // ✅ ESSA KEY PRECISA BATER COM: ["products-infinite", params]
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["products-infinite", baseParams],
     initialPageParam: 1,

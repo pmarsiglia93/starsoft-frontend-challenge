@@ -12,8 +12,8 @@ import { mapProductToCartItem } from "@/store/cart/cart.mappers";
 
 type Props = {
   product: Product;
-  onClick?: () => void; // opcional: se você quiser controlar navegação por router
-  index?: number; // opcional: stagger no grid
+  onClick?: () => void;
+  index?: number;
 };
 
 export function ProductCard({ product, onClick, index = 0 }: Props) {
@@ -26,8 +26,9 @@ export function ProductCard({ product, onClick, index = 0 }: Props) {
 
   const priceEth = useMemo(() => {
     const n = Number(product.price);
-    if (Number.isNaN(n)) return "0.00";
-    return n.toFixed(2);
+    if (Number.isNaN(n)) return "0";
+    if (Number.isInteger(n)) return String(n);
+    return String(Number(n.toFixed(2))); // remove zeros desnecessários (ex: 12.50 -> 12.5)
   }, [product.price]);
 
   function handleBuy() {
@@ -49,7 +50,6 @@ export function ProductCard({ product, onClick, index = 0 }: Props) {
       }}
       whileHover={reduceMotion ? undefined : { y: -2 }}
     >
-      {/* Imagem clicável: Link (Next) é o melhor padrão */}
       <motion.div
         className={styles.media}
         whileTap={reduceMotion ? undefined : { scale: 0.98 }}
@@ -72,39 +72,37 @@ export function ProductCard({ product, onClick, index = 0 }: Props) {
       </motion.div>
 
       <div className={styles.content}>
-        <h3 className={styles.title} title={product.name}>
-          {product.name}
-        </h3>
+        <div className={styles.textBlock}>
+          <h3 className={styles.title} title={product.name}>
+            {product.name}
+          </h3>
 
-        <p className={styles.description}>{product.description}</p>
+          <p className={styles.description}>{product.description}</p>
 
-        <div className={styles.priceRow}>
-          <span className={styles.ethIcon} aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 2l7 10-7 4-7-4 7-10Z"
-                fill="var(--color-white)"
-                opacity="0.9"
+          <div className={styles.priceRow}>
+            <span className={styles.ethIcon} aria-hidden="true">
+              <Image
+                src="/assets/icons/eth-logo.svg"
+                alt=""
+                width={29}
+                height={29}
+                className={styles.ethImage}
+                priority={false}
               />
-              <path
-                d="M12 22l7-10-7 4-7-4 7 10Z"
-                fill="var(--color-white)"
-                opacity="0.6"
-              />
-            </svg>
-          </span>
-          <span className={styles.price}>{priceEth} ETH</span>
+            </span>
+            <span className={styles.price}>{priceEth} ETH</span>
+          </div>
+
+          {/* Mantido para não arriscar quebrar testes, mas sem afetar layout (pixel perfect) */}
+          <Link
+            href={detailsHref}
+            onClick={onClick}
+            className={styles.srOnlyLink}
+            aria-label={`Ver mais sobre ${product.name}`}
+          >
+            VEJA MAIS
+          </Link>
         </div>
-
-        {/* CTA de detalhes: "Veja mais" (pra ficar mais próximo do Figma) */}
-        <Link
-          href={detailsHref}
-          onClick={onClick}
-          className={styles.seeMore}
-          aria-label={`Ver mais sobre ${product.name}`}
-        >
-          VEJA MAIS
-        </Link>
 
         <motion.button
           type="button"

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./CartItemRow.module.scss";
 import type { CartItem } from "@/store/cart/cart.slice";
 import { useAppDispatch } from "@/store/hooks";
@@ -10,6 +11,11 @@ type Props = {
 export function CartItemRow({ item }: Props) {
   const dispatch = useAppDispatch();
 
+  // tenta pegar description sem quebrar caso não exista no type atual
+  const description =
+    (item as unknown as { description?: string }).description ??
+    "Redesigned from scratch and completely revised.";
+
   return (
     <article className={styles.row}>
       <div className={styles.imageBox}>
@@ -19,11 +25,22 @@ export function CartItemRow({ item }: Props) {
 
       <div className={styles.info}>
         <div className={styles.name}>{item.name}</div>
+        <div className={styles.description}>{description}</div>
 
         <div className={styles.meta}>
-          <div className={styles.price}>{item.price.toFixed(2)} ETH</div>
+          <div className={styles.price}>
+            <span className={styles.ethIcon} aria-hidden="true">
+              <Image
+                src="/assets/icons/eth-logo.svg"
+                alt=""
+                width={29}
+                height={29}
+              />
+            </span>
+            <span>{item.price.toFixed(0)} ETH</span>
+          </div>
 
-          <div className={styles.qty}>
+          <div className={styles.qty} aria-label="Quantidade">
             <button
               type="button"
               className={styles.qtyBtn}
@@ -53,21 +70,12 @@ export function CartItemRow({ item }: Props) {
         onClick={() => dispatch(removeFromCart(item.id))}
         aria-label="Remover item"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M9 3h6m-8 4h10m-9 0 1 14h6l1-14"
-            stroke="var(--color-gray)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M10 11v7M14 11v7"
-            stroke="var(--color-gray)"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
+        <Image
+          src="/assets/icons/delete.svg"
+          alt="Remover"
+          width={43}
+          height={43}
+        />
       </button>
     </article>
   );
