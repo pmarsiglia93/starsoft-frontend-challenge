@@ -1,5 +1,8 @@
 ## Starsoft Frontend Challenge
 
+### Site
+https://starsoft-frontend-challenge-lovat.vercel.app/
+
 ### Requisitos
 - Node.js 18+ (recomendado 20)
 - npm 9+
